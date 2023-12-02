@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmployeesBE.Controllers;
 using EmployeesBE.Models;
+using EmployeesBE.Models.DTO;
 using EmployeesBE.Repository.IRepository;
 using FakeItEasy;
 using FluentAssertions;
@@ -25,7 +26,7 @@ namespace EmployeesBE.Tests.Controllers
         }
 
         [Fact]
-        public void EmployeeController_GetEmployees_ReturnsOk()
+        public async void EmployeeController_GetEmployees_ReturnsOk()
         {
             //Arrange
             var employees = A.Fake<IEnumerable<Employee>>();
@@ -35,7 +36,10 @@ namespace EmployeesBE.Tests.Controllers
             var result = _employeeController.GetEmployees();
 
             //Assert Object check actions
+            result.Should().NotBeNull();
+            //result.Should().BeOfType(typeof(OkObjectResult));
             result.Should().BeOfType<Task<ActionResult<APIResponse>>>();
+            //Assert.Equal(5, ((await result).Result as IEnumerable<Employee>).Count());
         }
 
         [Fact]
@@ -51,6 +55,19 @@ namespace EmployeesBE.Tests.Controllers
             //Assert Object check actions
             result.Should().BeOfType<Task<ActionResult<APIResponse>>>();
             //result.Result.Should().BeOfType<Employee>();
+        }
+
+        [Fact]
+        public void EmployeeController_CreateEmployeeReturnsOk()
+        {
+            //Arrange
+            var employeeDto = A.Fake<EmployeeDTO>();
+
+            //Act
+            var result = _employeeController.CreateEmployee(employeeDto);
+
+            //Assert
+            result.Should().BeOfType<Task<ActionResult<APIResponse>>>();
         }
 
     }
